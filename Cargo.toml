@@ -1,0 +1,6 @@
+[package]
+name = "typographic-linter"
+version = "0.1.0"
+authors = ["Raphaël Lustin <raphael@lustin.fr>"]
+
+[dependencies]
