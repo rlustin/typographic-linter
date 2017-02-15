@@ -1,5 +1,5 @@
 [root]
-name = "typographic-linter"
+name = "typographic_linter"
 version = "0.1.0"
 dependencies = [
  "regex 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
