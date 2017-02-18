@@ -37,17 +37,18 @@ impl Linter {
     }
 
     fn active_filters(&self, locale: &str) -> Vec<Box<LinterFilter>> {
-        self.filters()
+        self.filters(locale)
             .into_iter()
             .filter(|filter| filter.locales().is_empty() || filter.locales().contains(&locale))
             .collect()
     }
 
-    fn filters(&self) -> Vec<Box<LinterFilter>> {
+    fn filters(&self, locale: &str) -> Vec<Box<LinterFilter>> {
         vec![
             Box::new(CurlyApostropheFilter {}),
             Box::new(EllipsisSymbolFilter {}),
             Box::new(NoSpaceBeforeCommaFilter {}),
+            Box::new(QuotesFilter { locale: locale.to_string() }),
             Box::new(SpaceBeforeDoublePonctuationFilter {}),
         ]
     }

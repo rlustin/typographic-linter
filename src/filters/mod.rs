@@ -1,6 +1,7 @@
 pub mod curly_apostrophe_filter;
 pub mod ellipsis_symbol_filter;
 pub mod no_space_before_comma_filter;
+pub mod quotes_filter;
 pub mod space_before_double_ponctuation_filter;
 
 use super::*;
@@ -8,6 +9,7 @@ use super::*;
 pub use self::curly_apostrophe_filter::CurlyApostropheFilter;
 pub use self::ellipsis_symbol_filter::EllipsisSymbolFilter;
 pub use self::no_space_before_comma_filter::NoSpaceBeforeCommaFilter;
+pub use self::quotes_filter::QuotesFilter;
 pub use self::space_before_double_ponctuation_filter::SpaceBeforeDoublePonctuationFilter;
 
 pub trait LinterFilter {
