@@ -35,7 +35,7 @@ fn main() {
             println!("- At {}, {}: {}", warning.start, warning.end, warning.message);
         }
     } else {
-        println!("There’s no typograhic warning.");
+        println!("There’s no typographic warning.");
     }
 }
 ```
