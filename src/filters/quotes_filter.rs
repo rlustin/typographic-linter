@@ -9,6 +9,7 @@ impl LinterFilter for QuotesFilter {
         vec!(
             "de",
             "en",
+            "es",
             "fr",
             "it"
         )
@@ -18,6 +19,7 @@ impl LinterFilter for QuotesFilter {
         match &self.locale as &str {
             "de" => "Please use german quotation marks without spaces.",
             "en" => "Please use english double quotation marks without spaces.",
+            "es" => "Please use french quotation marks without spaces.",
             "fr" => "Please use french quotation marks with non-breaking spaces.",
             "it" => "Please use french quotation marks without spaces.",
             _ => "",
@@ -28,6 +30,7 @@ impl LinterFilter for QuotesFilter {
         match &self.locale as &str {
             "de" => "(\".+\")|(«.+»)|(“.+”)|(„[\\s].+[\\s]“)",
             "en" => "(\".+\")|(«.+»)|(“[\\s].+[\\s]”)|(„.+“)",
+            "es" => "(\".+\")|(«[\\s].+[\\s]»)|(“.+”)|(„.+“)",
             "fr" => "(\".+\")|(«[^ ].+[^ ]»)|(“.+”)|(„.+“)",
             "it" => "(\".+\")|(«\\s.+\\s»)|(“.+”)|(„.+“)",
             _ => "",
@@ -108,6 +111,64 @@ mod tests {
         let filter = QuotesFilter { locale: "de".to_string() };
 
         let result = filter.check("„Ich auch“, sagte der italienische");
+
+        assert_eq!(false, result.is_err());
+        assert_eq!((), result.unwrap());
+    }
+
+    #[test]
+    fn test_filters_when_es_and_straight_quotation_marks() {
+        let filter = QuotesFilter { locale: "es".to_string() };
+
+        let result = filter.check("\"Y yo también\", dijo el italiano");
+
+        assert!(result.is_err());
+
+        let warnings = result.err().unwrap();
+
+        assert_eq!(1, warnings.len());
+        assert_eq!("Please use french quotation marks without spaces.", warnings[0].message);
+        assert_eq!(0, warnings[0].start);
+        assert_eq!(15, warnings[0].end);
+    }
+
+    #[test]
+    fn test_filters_when_es_and_english_quotation_marks() {
+        let filter = QuotesFilter { locale: "es".to_string() };
+
+        let result = filter.check("“Y yo también”, dijo el italiano");
+
+        assert!(result.is_err());
+
+        let warnings = result.err().unwrap();
+
+        assert_eq!(1, warnings.len());
+        assert_eq!("Please use french quotation marks without spaces.", warnings[0].message);
+        assert_eq!(0, warnings[0].start);
+        assert_eq!(19, warnings[0].end);
+    }
+
+    #[test]
+    fn test_filters_when_es_and_french_quotation_marks_with_spaces() {
+        let filter = QuotesFilter { locale: "es".to_string() };
+
+        let result = filter.check("« Y yo también », dijo el italiano");
+
+        assert!(result.is_err());
+
+        let warnings = result.err().unwrap();
+
+        assert_eq!(1, warnings.len());
+        assert_eq!("Please use french quotation marks without spaces.", warnings[0].message);
+        assert_eq!(0, warnings[0].start);
+        assert_eq!(19, warnings[0].end);
+    }
+
+    #[test]
+    fn test_filter_when_es_and_no_warnings() {
+        let filter = QuotesFilter { locale: "es".to_string() };
+
+        let result = filter.check("«Y yo también», dijo el italiano");
 
         assert_eq!(false, result.is_err());
         assert_eq!((), result.unwrap());
