@@ -51,4 +51,5 @@ This library is a work in progress. For now, it only checks for the rules bellow
 - typographic quotation marks.
 
 ### French
+- prices;
 - spaces before double punctionation marks.
