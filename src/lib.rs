@@ -48,6 +48,7 @@ impl Linter {
             Box::new(CurlyApostropheFilter {}),
             Box::new(EllipsisSymbolFilter {}),
             Box::new(NoSpaceBeforeCommaFilter {}),
+            Box::new(PriceFilter { locale: locale.to_string() }),
             Box::new(QuotesFilter { locale: locale.to_string() }),
             Box::new(SpaceBeforeDoublePonctuationFilter {}),
         ]

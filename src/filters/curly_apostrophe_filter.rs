@@ -7,8 +7,8 @@ impl LinterFilter for CurlyApostropheFilter {
         "Please use curly apostrophes."
     }
 
-    fn regex_pattern(&self) -> &'static str {
-        r"[']"
+    fn regex_pattern(&self) -> String {
+        r"[']".to_string()
     }
 }
 

@@ -7,8 +7,8 @@ impl LinterFilter for NoSpaceBeforeCommaFilter {
         "Please don’t use a space before a comma."
     }
 
-    fn regex_pattern(&self) -> &'static str {
-        r"\s+,"
+    fn regex_pattern(&self) -> String {
+        r"\s+,".to_string()
     }
 }
 
