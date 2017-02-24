@@ -18,7 +18,7 @@ pub trait LinterFilter {
 
         let mut warnings = Vec::<LinterWarning>::new();
 
-        let results = Regex::new(self.regex_pattern()).unwrap();
+        let results = Regex::new(self.regex_pattern().as_str()).unwrap();
 
         for result in results.find_iter(text) {
             warnings.push(
@@ -42,5 +42,5 @@ pub trait LinterFilter {
     }
 
     fn message(&self) -> &'static str;
-    fn regex_pattern(&self) -> &'static str;
+    fn regex_pattern(&self) -> String;
 }

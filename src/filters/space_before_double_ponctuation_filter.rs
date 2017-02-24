@@ -11,8 +11,8 @@ impl LinterFilter for SpaceBeforeDoublePonctuationFilter {
         "Please use a non-breaking space before “double” ponctuation marks: `;`, `:`, `!`, `?`."
     }
 
-    fn regex_pattern(&self) -> &'static str {
-        r"[\w ][;:!?]"
+    fn regex_pattern(&self) -> String {
+        r"[\w ][;:!?]".to_string()
     }
 }
 

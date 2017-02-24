@@ -7,8 +7,8 @@ impl LinterFilter for EllipsisSymbolFilter {
         "Please use the ellipsis symbol (`…`) instead of three dots (`...`)."
     }
 
-    fn regex_pattern(&self) -> &'static str {
-        r"[.]{3}"
+    fn regex_pattern(&self) -> String {
+        r"[.]{3}".to_string()
     }
 }
 

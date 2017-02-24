@@ -26,15 +26,17 @@ impl LinterFilter for QuotesFilter {
         }
     }
 
-    fn regex_pattern(&self) -> &'static str {
-        match &self.locale as &str {
+    fn regex_pattern(&self) -> String {
+        let pattern = match &self.locale as &str {
             "de" => "(\".+\")|(«.+»)|(“.+”)|(„[\\s].+[\\s]“)",
             "en" => "(\".+\")|(«.+»)|(“[\\s].+[\\s]”)|(„.+“)",
             "es" => "(\".+\")|(«[\\s].+[\\s]»)|(“.+”)|(„.+“)",
             "fr" => "(\".+\")|(«[^ ].+[^ ]»)|(“.+”)|(„.+“)",
             "it" => "(\".+\")|(«\\s.+\\s»)|(“.+”)|(„.+“)",
             _ => "",
-        }
+        };
+
+        pattern.to_string()
     }
 }
 
