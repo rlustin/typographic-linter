@@ -6,7 +6,7 @@ Typographic linter – because we do care very much about typography.
 ## Overview
 
 `typographic-linter` is Rust library that checks for common typographic rules in several languages:
-English, French, German and Italian.
+English, French, German, Italian and Spanish.
 
 ## Library in action
 
