@@ -12,12 +12,12 @@ impl PriceFilter {
 
 impl LinterFilter for PriceFilter {
     fn locales(&self) -> Vec<&'static str> {
-        vec!("fr")
+        vec!("de", "fr")
     }
 
     fn message(&self) -> &'static str {
         match &self.locale as &str {
-            "fr" => "The currency sign should be written after the amount and a non-breaking space.",
+            "de" | "fr" => "The currency sign should be written after the amount and a non-breaking space.",
             _ => "",
         }
     }
@@ -29,7 +29,7 @@ impl LinterFilter for PriceFilter {
             //   by any of currencies() return values (ex: `120€` or `120 $`);
             // - any of currencies() return values followed by any whitespace character (or not)
             //   followed by digits (ex: `€120` or `$ 120`).
-            "fr" => format!("([\\d]+[^ ]?[{}]{{1}}|[{}]{{1}}[\\s]?[\\d]+)", self.currencies(), self.currencies()),
+            "de" | "fr" => format!("([\\d]+[^ ]?[{}]{{1}}|[{}]{{1}}[\\s]?[\\d]+)", self.currencies(), self.currencies()),
             _ => "".to_string(),
         }
     }
@@ -48,6 +48,9 @@ mod tests {
 
     fn expected_warnings() -> Vec<ExpectedWarning> {
         vec!(
+            ExpectedWarning { locale: "de", text: "€120", start: 0, end: 6},
+            ExpectedWarning { locale: "de", text: "120 €", start: 0, end: 7},
+            ExpectedWarning { locale: "de", text: "120€", start: 0, end: 6},
             ExpectedWarning { locale: "fr", text: "€120", start: 0, end: 6},
             ExpectedWarning { locale: "fr", text: "120 €", start: 0, end: 7},
             ExpectedWarning { locale: "fr", text: "120€", start: 0, end: 6}
@@ -69,6 +72,16 @@ mod tests {
             assert_eq!(expected_warning.start, warnings[0].start);
             assert_eq!(expected_warning.end, warnings[0].end);
         }
+    }
+
+    #[test]
+    fn test_filter_when_de_and_no_warnings() {
+        let filter = PriceFilter { locale: "de".to_string() };
+
+        let result = filter.check("120 €");
+
+        assert_eq!(false, result.is_err());
+        assert_eq!((), result.unwrap());
     }
 
     #[test]
