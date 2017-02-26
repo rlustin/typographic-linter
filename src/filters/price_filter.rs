@@ -40,23 +40,24 @@ mod tests {
     use super::*;
 
     struct ExpectedWarning {
+        locale: &'static str,
         text: &'static str,
         start: usize,
         end: usize,
     }
 
-    fn fr_expected_warnings() -> Vec<ExpectedWarning> {
+    fn expected_warnings() -> Vec<ExpectedWarning> {
         vec!(
-            ExpectedWarning { text: "€120", start: 0, end: 6},
-            ExpectedWarning { text: "120 €", start: 0, end: 7},
-            ExpectedWarning { text: "120€", start: 0, end: 6}
+            ExpectedWarning { locale: "fr", text: "€120", start: 0, end: 6},
+            ExpectedWarning { locale: "fr", text: "120 €", start: 0, end: 7},
+            ExpectedWarning { locale: "fr", text: "120€", start: 0, end: 6}
         )
     }
 
     #[test]
-    fn test_filters_when_fr_warnings() {
-        for expected_warning in fr_expected_warnings() {
-            let filter = PriceFilter { locale: "fr".to_string() };
+    fn test_filters_when_warnings() {
+        for expected_warning in expected_warnings() {
+            let filter = PriceFilter { locale: expected_warning.locale.to_string() };
 
             let result = filter.check(expected_warning.text);
 
@@ -65,7 +66,6 @@ mod tests {
             let warnings = result.err().unwrap();
 
             assert_eq!(1, warnings.len());
-            assert_eq!("The currency sign should be written after the amount and a non-breaking space.", warnings[0].message);
             assert_eq!(expected_warning.start, warnings[0].start);
             assert_eq!(expected_warning.end, warnings[0].end);
         }
