@@ -12,12 +12,13 @@ impl PriceFilter {
 
 impl LinterFilter for PriceFilter {
     fn locales(&self) -> Vec<&'static str> {
-        vec!("de", "es", "fr")
+        vec!("de", "en", "es", "fr")
     }
 
     fn message(&self) -> &'static str {
         match &self.locale as &str {
             "de" | "es" | "fr" => "The currency sign should be written after the amount and a non-breaking space.",
+            "en" => "The currency sign should be written before the amount without space.",
             _ => "",
         }
     }
@@ -30,6 +31,14 @@ impl LinterFilter for PriceFilter {
             // - any of currencies() return values followed by any whitespace character (or not)
             //   followed by digits (ex: `€120` or `$ 120`).
             "de" | "es" | "fr" => format!("([\\d]+[^ ]?[{}]{{1}}|[{}]{{1}}[\\s]?[\\d]+)", self.currencies(), self.currencies()),
+
+            // Matches one of the following:
+            // - digits followed by any whitespace character (or not) followed by any of
+            //   currencies() return values (ex: `120€` or `120 €`)
+            // - any of currencies() return values followed by any whitespace character followed by
+            //   digits (ex: `€ 120` or `$ 120`).
+            "en" => format!("([\\d]+[\\s]?[{}]{{1}}|[{}]{{1}}[\\s][\\d]+)", self.currencies(), self.currencies()),
+
             _ => "".to_string(),
         }
     }
@@ -51,6 +60,12 @@ mod tests {
             ExpectedWarning { locale: "de", text: "€120", start: 0, end: 6},
             ExpectedWarning { locale: "de", text: "120 €", start: 0, end: 7},
             ExpectedWarning { locale: "de", text: "120€", start: 0, end: 6},
+
+            ExpectedWarning { locale: "en", text: "120 €", start: 0, end: 7},
+            ExpectedWarning { locale: "en", text: "120 €", start: 0, end: 8},
+            ExpectedWarning { locale: "en", text: "120€", start: 0, end: 6},
+            ExpectedWarning { locale: "en", text: "€ 120", start: 0, end: 7},
+            ExpectedWarning { locale: "en", text: "€ 120", start: 0, end: 8},
 
             ExpectedWarning { locale: "es", text: "€120", start: 0, end: 6},
             ExpectedWarning { locale: "es", text: "120 €", start: 0, end: 7},
@@ -84,6 +99,16 @@ mod tests {
         let filter = PriceFilter { locale: "de".to_string() };
 
         let result = filter.check("120 €");
+
+        assert_eq!(false, result.is_err());
+        assert_eq!((), result.unwrap());
+    }
+
+    #[test]
+    fn test_filter_when_en_and_no_warnings() {
+        let filter = PriceFilter { locale: "en".to_string() };
+
+        let result = filter.check("€120");
 
         assert_eq!(false, result.is_err());
         assert_eq!((), result.unwrap());
