@@ -19,6 +19,7 @@ impl LinterFilter for PriceFilter {
         match &self.locale as &str {
             "de" | "es" | "fr" => "The currency sign should be written after the amount and a non-breaking space.",
             "en" => "The currency sign should be written before the amount without space.",
+            "it" => "The currency sign should be written before the amount and a non-breaking space.",
             _ => "",
         }
     }
@@ -38,6 +39,13 @@ impl LinterFilter for PriceFilter {
             // - any of currencies() return values followed by any whitespace character followed by
             //   digits (ex: `€ 120` or `$ 120`).
             "en" => format!("([\\d]+[\\s]?[{}]{{1}}|[{}]{{1}}[\\s][\\d]+)", self.currencies(), self.currencies()),
+
+            // Matches one of the following:
+            // - digits followed by any whitespace character (or not) followed by any of
+            //   currencies() return values (ex: `120€` or `120 €`)
+            // - any of currencies() return values followed by a character (or none) other than a
+            //   non-breaking space followed by digits (ex: `€ 120` or `$120`).
+            "it" => format!("([\\d]+[\\s]?[{}]{{1}}|[{}]{{1}}[^ ]?[\\d]+)", self.currencies(), self.currencies()),
 
             _ => "".to_string(),
         }
@@ -73,7 +81,13 @@ mod tests {
 
             ExpectedWarning { locale: "fr", text: "€120", start: 0, end: 6},
             ExpectedWarning { locale: "fr", text: "120 €", start: 0, end: 7},
-            ExpectedWarning { locale: "fr", text: "120€", start: 0, end: 6}
+            ExpectedWarning { locale: "fr", text: "120€", start: 0, end: 6},
+
+            ExpectedWarning { locale: "it", text: "120 €", start: 0, end: 7},
+            ExpectedWarning { locale: "it", text: "120 €", start: 0, end: 8},
+            ExpectedWarning { locale: "it", text: "120€", start: 0, end: 6},
+            ExpectedWarning { locale: "it", text: "€120", start: 0, end: 6},
+            ExpectedWarning { locale: "it", text: "€ 120", start: 0, end: 7}
         )
     }
 
@@ -119,6 +133,16 @@ mod tests {
         let filter = PriceFilter { locale: "es".to_string() };
 
         let result = filter.check("120 €");
+
+        assert_eq!(false, result.is_err());
+        assert_eq!((), result.unwrap());
+    }
+
+    #[test]
+    fn test_filter_when_it_and_no_warnings() {
+        let filter = PriceFilter { locale: "it".to_string() };
+
+        let result = filter.check("€ 120");
 
         assert_eq!(false, result.is_err());
         assert_eq!((), result.unwrap());
