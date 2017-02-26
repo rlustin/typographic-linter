@@ -48,8 +48,8 @@ This library is a work in progress. For now, it only checks for the rules bellow
 - curly apostrophes;
 - ellipsis symbol;
 - no space before comma;
+- prices;
 - typographic quotation marks.
 
 ### French
-- prices;
 - spaces before double punctionation marks.
