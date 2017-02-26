@@ -22,7 +22,7 @@ impl LinterFilter for QuotesFilter {
             "es" => "Please use french quotation marks without spaces.",
             "fr" => "Please use french quotation marks with non-breaking spaces.",
             "it" => "Please use french quotation marks without spaces.",
-            _ => "",
+            _ => unimplemented!(),
         }
     }
 
@@ -33,7 +33,7 @@ impl LinterFilter for QuotesFilter {
             "es" => "(\".+\")|(«[\\s].+[\\s]»)|(“.+”)|(„.+“)",
             "fr" => "(\".+\")|(«[^ ].+[^ ]»)|(“.+”)|(„.+“)",
             "it" => "(\".+\")|(«\\s.+\\s»)|(“.+”)|(„.+“)",
-            _ => "",
+            _ => unimplemented!(),
         };
 
         pattern.to_string()

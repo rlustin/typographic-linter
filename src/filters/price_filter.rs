@@ -20,7 +20,7 @@ impl LinterFilter for PriceFilter {
             "de" | "es" | "fr" => "The currency sign should be written after the amount and a non-breaking space.",
             "en" => "The currency sign should be written before the amount without space.",
             "it" => "The currency sign should be written before the amount and a non-breaking space.",
-            _ => "",
+            _ => unimplemented!(),
         }
     }
 
@@ -47,7 +47,7 @@ impl LinterFilter for PriceFilter {
             //   non-breaking space followed by digits (ex: `€ 120` or `$120`).
             "it" => format!("([\\d]+[\\s]?[{}]{{1}}|[{}]{{1}}[^ ]?[\\d]+)", self.currencies(), self.currencies()),
 
-            _ => "".to_string(),
+            _ => unimplemented!(),
         }
     }
 }
