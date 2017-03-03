@@ -19,9 +19,8 @@ impl LinterFilter for QuotesFilter {
         match &self.locale as &str {
             "de" => "Please use german quotation marks without spaces.",
             "en" => "Please use english double quotation marks without spaces.",
-            "es" => "Please use french quotation marks without spaces.",
+            "es" | "it" => "Please use french quotation marks without spaces.",
             "fr" => "Please use french quotation marks with non-breaking spaces.",
-            "it" => "Please use french quotation marks without spaces.",
             _ => unimplemented!(),
         }
     }
