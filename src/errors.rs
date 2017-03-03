@@ -11,7 +11,7 @@ pub struct LinterWarning {
 impl fmt::Display for LinterWarning {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            LinterWarning { ref message, ref start, ref end } => {
+            LinterWarning { message, ref start, ref end } => {
                 f.write_str(
                     format!("Warning: {} ({}, {})", message, start, end).as_str()
                 )
@@ -24,7 +24,7 @@ impl Error for LinterWarning {
     #[allow(unused_variables)]
     fn description(&self) -> &str {
         match *self {
-            LinterWarning { ref message, ref start, ref end } => { message },
+            LinterWarning { message, ref start, ref end } => { message },
         }
     }
 }
