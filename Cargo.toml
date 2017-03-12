@@ -6,13 +6,10 @@ keywords = [
     "typography",
     "linter"
 ]
-travis-ci = {
-    repository = "https://github.com/rlustin/typographic-linter",
-    branch = "master"
-}
+travis-ci = { repository = "https://github.com/rlustin/typographic-linter", branch = "master" }
 readme = "README.md"
 repository = "https://github.com/rlustin/typographic-linter"
-licence = "MIT"
+license = "MIT"
 authors = ["Raphaël Lustin <raphael@lustin.fr>"]
 
 [dependencies]
