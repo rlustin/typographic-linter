@@ -1,6 +1,18 @@
 [package]
 name = "typographic_linter"
 version = "0.1.0"
+description = "Library that checks for common typographic rules in several languages: English, French, German, Italian and Spanish."
+keywords = [
+    "typography",
+    "linter"
+]
+travis-ci = {
+    repository = "https://github.com/rlustin/typographic-linter",
+    branch = "master"
+}
+readme = "README.md"
+repository = "https://github.com/rlustin/typographic-linter"
+licence = "MIT"
 authors = ["Raphaël Lustin <raphael@lustin.fr>"]
 
 [dependencies]
