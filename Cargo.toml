@@ -1,6 +1,6 @@
 [package]
 name = "typographic_linter"
-version = "0.1.0"
+version = "0.2.0"
 description = "Library that checks for common typographic rules in several languages: English, French, German, Italian and Spanish."
 keywords = [
     "typography",
@@ -14,4 +14,6 @@ authors = ["Raphaël Lustin <raphael@lustin.fr>"]
 
 [dependencies]
 regex = "0.2.1"
-rustc-serialize = "^0"
+serde = "^1.0"
+serde_derive = "^1.0"
+serde_json = "^1.0"
