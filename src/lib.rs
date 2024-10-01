@@ -38,14 +38,14 @@ impl Linter {
         }
     }
 
-    fn active_filters(&self, locale: &str) -> Vec<Box<LinterFilter>> {
+    fn active_filters(&self, locale: &str) -> Vec<Box<dyn LinterFilter>> {
         self.filters(locale)
             .into_iter()
             .filter(|filter| filter.locales().is_empty() || filter.locales().contains(&locale))
             .collect()
     }
 
-    fn filters(&self, locale: &str) -> Vec<Box<LinterFilter>> {
+    fn filters(&self, locale: &str) -> Vec<Box<dyn LinterFilter>> {
         vec![
             Box::new(CurlyApostropheFilter {}),
             Box::new(EllipsisSymbolFilter {}),
