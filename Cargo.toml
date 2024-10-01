@@ -1,4 +1,5 @@
 [package]
+edition = '2021'
 name = "typographic_linter"
 version = "0.2.0"
 description = "Library that checks for common typographic rules in several languages: English, French, German, Italian and Spanish."
